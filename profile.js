@@ -24,12 +24,14 @@ import {
 
 // Firebase Config (نفس البيانات من login)
 const firebaseConfig = {
-    apiKey: "AIzaSyDummyExampleReplaceWithYourOwnKey",
-    authDomain: "your-project.firebaseapp.com",
-    projectId: "your-project-id",
-    storageBucket: "your-project.appspot.com",
-    messagingSenderId: "123456789012",
-    appId: "1:123456789012:web:abcdef123456"
+  apiKey: "AIzaSyB0p0us6BuzD2ngzjhRnmUIhlOcBeRp0vQ",
+  authDomain: "tok-tak-d6e17.firebaseapp.com",
+  databaseURL: "https://tok-tak-d6e17-default-rtdb.firebaseio.com",
+  projectId: "tok-tak-d6e17",
+  storageBucket: "tok-tak-d6e17.appspot.com",
+  messagingSenderId: "547062578826",
+  appId: "1:547062578826:web:aa285cf798341be07cb773",
+  measurementId: "G-7EMKEQKPVV"
 };
 
 const app = initializeApp(firebaseConfig);
