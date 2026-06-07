@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل دخول الطلاب - Firebase</title>
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+        
+        // إعدادات Firebase الخاصة بك (استبدلها بإعدادات مشروعك)
+const firebaseConfig = {
+  apiKey: "AIzaSyB0p0us6BuzD2ngzjhRnmUIhlOcBeRp0vQ",
+  authDomain: "tok-tak-d6e17.firebaseapp.com",
+  databaseURL: "https://tok-tak-d6e17-default-rtdb.firebaseio.com",
+  projectId: "tok-tak-d6e17",
+  storageBucket: "tok-tak-d6e17.appspot.com",
+  messagingSenderId: "547062578826",
+  appId: "1:547062578826:web:aa285cf798341be07cb773",
+  measurementId: "G-7EMKEQKPVV"
+};
+
+        // تهيئة Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        window.handleLogin = async function() {
+            const studentName = document.getElementById('studentName').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            if (!studentName || !phone || !email || !password) {
+                alert("❌ يرجى ملء جميع الحقول");
+                return;
+            }
+
+            if (!isEmailVerified) {
+                alert("⚠️ يجب توثيق البريد الإلكتروني أولاً");
+                return;
+            }
+
+            try {
+                // تسجيل الدخول باستخدام البريد وكلمة المرور
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // التحقق من أن البريد مفعل
+                if (!user.emailVerified) {
+                    alert("⚠️ الرجاء تفعيل بريدك الإلكتروني أولاً. تم إرسال رابط التفعيل مجدداً.");
+                    await sendEmailVerification(user);
+                    return;
+                }
+
+                // جلب بيانات الطالب من Firestore
+                const studentRef = doc(db, "students", user.uid);
+                const studentSnap = await getDoc(studentRef);
+                
+                if (studentSnap.exists()) {
+                    const data = studentSnap.data();
+                    if (data.phone === phone && data.name === studentName) {
+                        alert(`✅ مرحباً ${studentName}!\nتم تسجيل الدخول بنجاح عبر Firebase.`);
+                        // window.location.href = "/dashboard";
+                    } else {
+                        alert("❌ رقم الهاتف أو اسم الطالب لا يتطابق مع البيانات المخزنة.");
+                    }
+                } else {
+                    alert("❌ لا يوجد حساب بهذا البريد. يرجى التسجيل أولاً.");
+                }
+            } catch (error) {
+                console.error(error);
+                if (error.code === 'auth/user-not-found') {
+                    alert("❌ لم يتم العثور على حساب بهذا البريد. يرجى التسجيل.");
+                } else if (error.code === 'auth/wrong-password') {
+                    alert("❌ كلمة المرور غير صحيحة.");
+                } else {
+                    alert("⚠️ خطأ في تسجيل الدخول: " + error.message);
+                }
+            }
+        };
+
+        window.registerNewStudent = async function() {
+            const studentName = document.getElementById('studentName').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            if (!studentName || !phone || !email || !password) {
+                alert("❌ يرجى ملء جميع الحقول للتسجيل");
+                return;
+            }
+
+            if (!isEmailVerified) {
+                alert("⚠️ يجب توثيق البريد الإلكتروني أولاً");
+                return;
+            }
+
+            try {
+                // إنشاء حساب جديد في Firebase Authentication
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // إرسال رابط تفعيل البريد
+                await sendEmailVerification(user);
+
+                // تخزين بيانات الطالب في Firestore
+                const studentRef = doc(db, "students", user.uid);
+                await setDoc(studentRef, {
+                    name: studentName,
+                    phone: phone,
+                    email: email,
+                    createdAt: new Date().toISOString()
+                });
+
+                alert(`✅ تم إنشاء حساب جديد!\nتم إرسال رابط التفعيل إلى ${email}\nيرجى تفعيل بريدك ثم تسجيل الدخول.`);
+            } catch (error) {
+                console.error(error);
+                if (error.code === 'auth/email-already-in-use') {
+                    alert("❌ هذا البريد مستخدم بالفعل. يرجى تسجيل الدخول.");
+                } else {
+                    alert("⚠️ خطأ في التسجيل: " + error.message);
+                }
+            }
+        };
+    </script>
+    <style>
+        /* نفس التصميم السابق */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tahoma', sans-serif; }
+        body { min-height: 100vh; background: linear-gradient(145deg, #10172b 0%, #1b2a4e 100%); display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .login-container { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(12px); border-radius: 48px; padding: 30px 28px 40px; width: 100%; max-width: 480px; box-shadow: 0 25px 45px rgba(0,0,0,0.3); }
+        h1 { font-size: 32px; font-weight: 700; text-align: center; color: #fff; margin-bottom: 8px; }
+        .sub { text-align: center; color: #cfdef5; font-size: 14px; margin-bottom: 32px; }
+        .input-group { margin-bottom: 24px; display: flex; flex-direction: column; gap: 8px; }
+        label { font-weight: 600; color: #eef4ff; font-size: 14px; }
+        input { background: #f9fcff; border: none; padding: 16px 18px; border-radius: 28px; font-size: 16px; outline: none; width: 100%; }
+        input:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.3); }
+        .verify-row { display: flex; gap: 12px; align-items: center; }
+        .verify-btn { background: #2c3e66; color: white; border: none; padding: 0 18px; height: 52px; border-radius: 40px; font-weight: bold; cursor: pointer; }
+        .verify-btn:hover { background: #1e2b4a; }
+        button[type="button"], button[type="submit"] { width: 100%; background: linear-gradient(95deg, #f97316, #ef4444); border: none; padding: 16px; border-radius: 44px; font-size: 18px; font-weight: bold; color: white; margin-top: 10px; cursor: pointer; }
+        .btn-secondary { background: linear-gradient(95deg, #3b82f6, #2563eb); }
+        .extra-links { display: flex; justify-content: space-between; margin-top: 20px; font-size: 13px; }
+        .extra-links a { color: #ffd966; text-decoration: none; }
+        .note { font-size: 12px; text-align: center; margin-top: 28px; color: #b9ceff; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 60px; }
+        hr { margin: 20px 0; border-color: rgba(255,255,255,0.2); }
+    </style>
+</head>
+<body>
+<div class="login-container">
+    <h1>📚 تشرش سوقثحف</h1>
+    <div class="sub">بوابة الطلاب — Firebase Authentication</div>
+
+    <div class="input-group">
+        <label>👤 اسم الطالب الكامل</label>
+        <input type="text" id="studentName" placeholder="مثال: أحمد محمد علي">
+    </div>
+    <div class="input-group">
+        <label>📱 رقم الهاتف</label>
+        <input type="tel" id="phone" placeholder="05xxxxxxxx">
+    </div>
+    <div class="input-group">
+        <label>🔒 كلمة المرور</label>
+        <input type="password" id="password" placeholder="••••••••">
+    </div>
+    <div class="input-group">
+        <label>✉️ البريد الإلكتروني (للتسجيل والدخول)</label>
+        <div class="verify-row">
+            <input type="email" id="email" placeholder="student@example.com">
+            <button type="button" class="verify-btn" id="verifyEmailBtn">تحقق (رمز)</button>
+        </div>
+    </div>
+
+    <button type="button" onclick="handleLogin()">🚪 تسجيل الدخول</button>
+    <button type="button" class="btn-secondary" onclick="registerNewStudent()">📝 إنشاء حساب جديد (تسجيل)</button>
+
+    <div class="note">
+        🔐 يعمل عبر Firebase: توثيق البريد الإلكتروني + تخزين بيانات الطالب في Firestore<br>
+        ⚠️ استبدل إعدادات Firebase الخاصة بك في الكود.
+    </div>
+</div>
+
+<script>
+    // محاكاة التحقق من البريد (يمكن ربطه مع Firebase حقيقة)
+    let isEmailVerified = false;
+    document.getElementById('verifyEmailBtn').addEventListener('click', function() {
+        const email = document.getElementById('email').value.trim();
+        if (!email || !email.includes('@')) {
+            alert('أدخل بريداً صحيحاً');
+            return;
+        }
+        const fakeCode = Math.floor(100000 + Math.random() * 900000);
+        alert(`رمز التحقق التجريبي: ${fakeCode}\n(في التطبيق الحقيقي سيتم إرساله لبريدك)`);
+        const userCode = prompt("أدخل الرمز:");
+        if (userCode == fakeCode) {
+            isEmailVerified = true;
+            alert("✅ تم توثيق البريد");
+            document.getElementById('verifyEmailBtn').innerText = "✔ موثق";
+            document.getElementById('verifyEmailBtn').style.background = "#10b981";
+        } else {
+            isEmailVerified = false;
+            alert("❌ رمز خاطئ");
+        }
+    });
+</script>
+</body>
+</html>
