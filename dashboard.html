@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الملف الشخصي | Dashboard</title>
+    <link rel="stylesheet" href="profile.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="ambient-bg"></div>
+    
+    <!-- Navigation Bar -->
+    <nav class="glass-nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <div class="logo-icon">✨</div>
+                <span>NEXUS</span>
+            </div>
+            <div class="nav-links">
+                <a href="#" class="nav-link">الرئيسية</a>
+                <a href="#" class="nav-link">المشاريع</a>
+                <a href="#" class="nav-link">الإشعارات</a>
+                <a href="#" class="nav-link active">الملف الشخصي</a>
+            </div>
+            <div class="nav-actions">
+                <button class="notification-btn">
+                    <span>🔔</span>
+                    <span class="badge">3</span>
+                </button>
+                <div class="user-menu-btn" id="userMenuBtn">
+                    <div class="user-avatar-mini" id="navAvatar">AM</div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar-glass" id="sidebar">
+            <div class="sidebar-user">
+                <div class="sidebar-avatar" id="sidebarAvatar">
+                    <span id="sidebarInitials">AM</span>
+                </div>
+                <h4 id="sidebarName">أحمد محمد</h4>
+                <p id="sidebarEmail">ahmed@example.com</p>
+            </div>
+            
+            <nav class="sidebar-menu">
+                <a href="#" class="menu-item active" data-tab="overview">
+                    <span class="menu-icon">📊</span>
+                    <span>نظرة عامة</span>
+                </a>
+                <a href="#" class="menu-item" data-tab="personal">
+                    <span class="menu-icon">👤</span>
+                    <span>المعلومات الشخصية</span>
+                </a>
+                <a href="#" class="menu-item" data-tab="professional">
+                    <span class="menu-icon">💼</span>
+                    <span>المعلومات المهنية</span>
+                </a>
+                <a href="#" class="menu-item" data-tab="security">
+                    <span class="menu-icon">🔒</span>
+                    <span>الأمان والخصوصية</span>
+                </a>
+                <a href="#" class="menu-item" data-tab="activity">
+                    <span class="menu-icon">📜</span>
+                    <span>سجل النشاطات</span>
+                </a>
+                <a href="#" class="menu-item" data-tab="preferences">
+                    <span class="menu-icon">⚙️</span>
+                    <span>الإعدادات</span>
+                </a>
+            </nav>
+            
+            <button class="logout-btn" id="logoutBtn">
+                <span>🚪</span>
+                <span>تسجيل الخروج</span>
+            </button>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content-area">
+            <div class="content-header">
+                <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+                <div class="page-title">
+                    <h1>الملف الشخصي</h1>
+                    <p>مرحباً بعودتك! 👋</p>
+                </div>
+                <div class="header-actions">
+                    <button class="action-btn" id="editModeBtn">
+                        <span>✏️</span>
+                        <span>تعديل</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Overview Tab -->
+            <div class="tab-content active" id="overviewTab">
+                <!-- Hero Section -->
+                <div class="profile-hero">
+                    <div class="hero-bg"></div>
+                    <div class="hero-content">
+                        <div class="avatar-large-container">
+                            <div class="avatar-large" id="profileAvatar">
+                                <span id="profileInitials">AM</span>
+                            </div>
+                            <button class="change-avatar-btn" id="changeAvatarTrigger">
+                                <span>📷</span>
+                            </button>
+                        </div>
+                        <div class="hero-info">
+                            <h1 id="heroName">أحمد محمد</h1>
+                            <div class="hero-badges">
+                                <span class="badge verified">✓ تم التحقق</span>
+                                <span class="badge premium" id="premiumBadge">⭐ عضو مميز</span>
+                            </div>
+                            <p class="hero-bio" id="heroBio">مطور ويب محترف | خبرة 5+ سنوات</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">📅</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="memberSinceStat">2024</span>
+                            <span class="stat-label">عضو منذ</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🔐</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="loginCountStat">24</span>
+                            <span class="stat-label">مرة تسجيل دخول</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📁</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="projectsCountStat">12</span>
+                            <span class="stat-label">مشروع مكتمل</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🏆</div>
+                        <div class="stat-info">
+                            <span class="stat-value" id="achievementsStat">8</span>
+                            <span class="stat-label">إنجازات</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="recent-activity">
+                    <h3>آخر النشاطات</h3>
+                    <div class="activity-list" id="recentActivityList">
+                        <!-- Dynamic content -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Personal Info Tab -->
+            <div class="tab-content" id="personalTab">
+                <div class="info-card">
+                    <h2>المعلومات الأساسية</h2>
+                    <div class="info-grid" id="personalInfoGrid">
+                        <!-- Dynamic form -->
+                    </div>
+                </div>
+                <div class="info-card">
+                    <h2>معلومات التواصل</h2>
+                    <div class="info-grid" id="contactInfoGrid">
+                        <!-- Dynamic form -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Professional Tab -->
+            <div class="tab-content" id="professionalTab">
+                <div class="info-card">
+                    <h2>المعلومات المهنية</h2>
+                    <div class="info-grid" id="professionalInfoGrid">
+                        <!-- Dynamic form -->
+                    </div>
+                </div>
+                <div class="info-card">
+                    <h2>المهارات</h2>
+                    <div class="skills-container" id="skillsContainer">
+                        <!-- Dynamic skills -->
+                    </div>
+                    <button class="add-skill-btn" id="addSkillBtn">+ إضافة مهارة</button>
+                </div>
+            </div>
+
+            <!-- Security Tab -->
+            <div class="tab-content" id="securityTab">
+                <div class="info-card">
+                    <h2>تغيير كلمة المرور</h2>
+                    <form id="passwordForm" class="security-form">
+                        <div class="form-group">
+                            <label>كلمة المرور الحالية</label>
+                            <input type="password" id="currentPassword" class="modern-input" placeholder="••••••••">
+                        </div>
+                        <div class="form-group">
+                            <label>كلمة المرور الجديدة</label>
+                            <input type="password" id="newPassword" class="modern-input" placeholder="••••••••">
+                        </div>
+                        <div class="form-group">
+                            <label>تأكيد كلمة المرور الجديدة</label>
+                            <input type="password" id="confirmPassword" class="modern-input" placeholder="••••••••">
+                        </div>
+                        <button type="submit" class="btn-primary">تحديث كلمة المرور</button>
+                    </form>
+                </div>
+                
+                <div class="info-card">
+                    <h2>المصادقة الثنائية</h2>
+                    <div class="twofa-setting">
+                        <div class="setting-info">
+                            <span class="setting-icon">🛡️</span>
+                            <div>
+                                <h4>تفعيل المصادقة الثنائية</h4>
+                                <p>أضف طبقة أمان إضافية لحسابك</p>
+                            </div>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="twofaToggle">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h2>الأجهزة المتصلة</h2>
+                    <div class="devices-list" id="devicesList">
+                        <!-- Dynamic devices -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Activity Tab -->
+            <div class="tab-content" id="activityTab">
+                <div class="activity-filters">
+                    <button class="filter-btn active" data-filter="all">الكل</button>
+                    <button class="filter-btn" data-filter="login">تسجيل دخول</button>
+                    <button class="filter-btn" data-filter="edit">تعديلات</button>
+                    <button class="filter-btn" data-filter="project">مشاريع</button>
+                </div>
+                <div class="activity-timeline" id="activityTimeline">
+                    <!-- Dynamic activity -->
+                </div>
+            </div>
+
+            <!-- Preferences Tab -->
+            <div class="tab-content" id="preferencesTab">
+                <div class="info-card">
+                    <h2>الإعدادات العامة</h2>
+                    <div class="preference-item">
+                        <div>
+                            <h4>الوضع الليلي</h4>
+                            <p>تفعيل الوضع المظلم للواجهة</p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="darkModeToggle" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="preference-item">
+                        <div>
+                            <h4>الإشعارات البريدية</h4>
+                            <p>استلام إشعارات عبر البريد الإلكتروني</p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="emailNotifications">
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="preference-item">
+                        <div>
+                            <h4>اللغة</h4>
+                            <p>اختر اللغة المفضلة</p>
+                        </div>
+                        <select class="language-select" id="languageSelect">
+                            <option value="ar">العربية</option>
+                            <option value="en">English</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Edit Mode Modal -->
+    <div class="modal-overlay hidden" id="editModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>تعديل المعلومات</h3>
+                <button class="modal-close" id="closeModal">✕</button>
+            </div>
+            <div class="modal-body" id="editModalBody">
+                <!-- Dynamic form -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" id="cancelModal">إلغاء</button>
+                <button class="btn-primary" id="saveModal">حفظ التغييرات</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Change Avatar Modal -->
+    <div class="modal-overlay hidden" id="avatarModal">
+        <div class="modal-container modal-sm">
+            <div class="modal-header">
+                <h3>تغيير الصورة الشخصية</h3>
+                <button class="modal-close" id="closeAvatarModal">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="avatar-preview" id="avatarPreview">
+                    <div class="preview-circle" id="previewCircle">AM</div>
+                </div>
+                <div class="avatar-colors">
+                    <h4>اختر لون الخلفية</h4>
+                    <div class="color-grid">
+                        <div class="color-option" data-color="#3ce0d4"></div>
+                        <div class="color-option" data-color="#ff6b6b"></div>
+                        <div class="color-option" data-color="#4ecdc4"></div>
+                        <div class="color-option" data-color="#45b7d1"></div>
+                        <div class="color-option" data-color="#96ceb4"></div>
+                        <div class="color-option" data-color="#f4d03f"></div>
+                        <div class="color-option" data-color="#e74c3c"></div>
+                        <div class="color-option" data-color="#9b59b6"></div>
+                    </div>
+                </div>
+                <div class="avatar-upload">
+                    <button class="btn-secondary" id="uploadImageBtn">📁 رفع صورة</button>
+                    <input type="file" id="avatarFileInput" accept="image/*" hidden>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toastMessage" class="toast hidden"></div>
+
+    <script type="module" src="profile.js"></script>
+</body>
+</html>
