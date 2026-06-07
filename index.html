@@ -2,208 +2,113 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تسجيل دخول الطلاب - Firebase</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>تسجيل الدخول | منصة احترافية</title>
+    <link rel="stylesheet" href="style.css">
     <!-- Firebase SDKs -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, sendEmailVerification } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
-        
-        // إعدادات Firebase الخاصة بك (استبدلها بإعدادات مشروعك)
-const firebaseConfig = {
-  apiKey: "AIzaSyB0p0us6BuzD2ngzjhRnmUIhlOcBeRp0vQ",
-  authDomain: "tok-tak-d6e17.firebaseapp.com",
-  databaseURL: "https://tok-tak-d6e17-default-rtdb.firebaseio.com",
-  projectId: "tok-tak-d6e17",
-  storageBucket: "tok-tak-d6e17.appspot.com",
-  messagingSenderId: "547062578826",
-  appId: "1:547062578826:web:aa285cf798341be07cb773",
-  measurementId: "G-7EMKEQKPVV"
-};
-
-        // تهيئة Firebase
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        window.handleLogin = async function() {
-            const studentName = document.getElementById('studentName').value.trim();
-            const phone = document.getElementById('phone').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value.trim();
-
-            if (!studentName || !phone || !email || !password) {
-                alert("❌ يرجى ملء جميع الحقول");
-                return;
-            }
-
-            if (!isEmailVerified) {
-                alert("⚠️ يجب توثيق البريد الإلكتروني أولاً");
-                return;
-            }
-
-            try {
-                // تسجيل الدخول باستخدام البريد وكلمة المرور
-                const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
-
-                // التحقق من أن البريد مفعل
-                if (!user.emailVerified) {
-                    alert("⚠️ الرجاء تفعيل بريدك الإلكتروني أولاً. تم إرسال رابط التفعيل مجدداً.");
-                    await sendEmailVerification(user);
-                    return;
-                }
-
-                // جلب بيانات الطالب من Firestore
-                const studentRef = doc(db, "students", user.uid);
-                const studentSnap = await getDoc(studentRef);
-                
-                if (studentSnap.exists()) {
-                    const data = studentSnap.data();
-                    if (data.phone === phone && data.name === studentName) {
-                        alert(`✅ مرحباً ${studentName}!\nتم تسجيل الدخول بنجاح عبر Firebase.`);
-                        // window.location.href = "/dashboard";
-                    } else {
-                        alert("❌ رقم الهاتف أو اسم الطالب لا يتطابق مع البيانات المخزنة.");
-                    }
-                } else {
-                    alert("❌ لا يوجد حساب بهذا البريد. يرجى التسجيل أولاً.");
-                }
-            } catch (error) {
-                console.error(error);
-                if (error.code === 'auth/user-not-found') {
-                    alert("❌ لم يتم العثور على حساب بهذا البريد. يرجى التسجيل.");
-                } else if (error.code === 'auth/wrong-password') {
-                    alert("❌ كلمة المرور غير صحيحة.");
-                } else {
-                    alert("⚠️ خطأ في تسجيل الدخول: " + error.message);
-                }
-            }
-        };
-
-        window.registerNewStudent = async function() {
-            const studentName = document.getElementById('studentName').value.trim();
-            const phone = document.getElementById('phone').value.trim();
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value.trim();
-
-            if (!studentName || !phone || !email || !password) {
-                alert("❌ يرجى ملء جميع الحقول للتسجيل");
-                return;
-            }
-
-            if (!isEmailVerified) {
-                alert("⚠️ يجب توثيق البريد الإلكتروني أولاً");
-                return;
-            }
-
-            try {
-                // إنشاء حساب جديد في Firebase Authentication
-                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
-
-                // إرسال رابط تفعيل البريد
-                await sendEmailVerification(user);
-
-                // تخزين بيانات الطالب في Firestore
-                const studentRef = doc(db, "students", user.uid);
-                await setDoc(studentRef, {
-                    name: studentName,
-                    phone: phone,
-                    email: email,
-                    createdAt: new Date().toISOString()
-                });
-
-                alert(`✅ تم إنشاء حساب جديد!\nتم إرسال رابط التفعيل إلى ${email}\nيرجى تفعيل بريدك ثم تسجيل الدخول.`);
-            } catch (error) {
-                console.error(error);
-                if (error.code === 'auth/email-already-in-use') {
-                    alert("❌ هذا البريد مستخدم بالفعل. يرجى تسجيل الدخول.");
-                } else {
-                    alert("⚠️ خطأ في التسجيل: " + error.message);
-                }
-            }
-        };
+        // تم تضمين Firebase مباشرة في script.js
     </script>
-    <style>
-        /* نفس التصميم السابق */
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tahoma', sans-serif; }
-        body { min-height: 100vh; background: linear-gradient(145deg, #10172b 0%, #1b2a4e 100%); display: flex; justify-content: center; align-items: center; padding: 20px; }
-        .login-container { background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(12px); border-radius: 48px; padding: 30px 28px 40px; width: 100%; max-width: 480px; box-shadow: 0 25px 45px rgba(0,0,0,0.3); }
-        h1 { font-size: 32px; font-weight: 700; text-align: center; color: #fff; margin-bottom: 8px; }
-        .sub { text-align: center; color: #cfdef5; font-size: 14px; margin-bottom: 32px; }
-        .input-group { margin-bottom: 24px; display: flex; flex-direction: column; gap: 8px; }
-        label { font-weight: 600; color: #eef4ff; font-size: 14px; }
-        input { background: #f9fcff; border: none; padding: 16px 18px; border-radius: 28px; font-size: 16px; outline: none; width: 100%; }
-        input:focus { border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.3); }
-        .verify-row { display: flex; gap: 12px; align-items: center; }
-        .verify-btn { background: #2c3e66; color: white; border: none; padding: 0 18px; height: 52px; border-radius: 40px; font-weight: bold; cursor: pointer; }
-        .verify-btn:hover { background: #1e2b4a; }
-        button[type="button"], button[type="submit"] { width: 100%; background: linear-gradient(95deg, #f97316, #ef4444); border: none; padding: 16px; border-radius: 44px; font-size: 18px; font-weight: bold; color: white; margin-top: 10px; cursor: pointer; }
-        .btn-secondary { background: linear-gradient(95deg, #3b82f6, #2563eb); }
-        .extra-links { display: flex; justify-content: space-between; margin-top: 20px; font-size: 13px; }
-        .extra-links a { color: #ffd966; text-decoration: none; }
-        .note { font-size: 12px; text-align: center; margin-top: 28px; color: #b9ceff; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 60px; }
-        hr { margin: 20px 0; border-color: rgba(255,255,255,0.2); }
-    </style>
 </head>
 <body>
-<div class="login-container">
-    <h1>📚 تشرش سوقثحف</h1>
-    <div class="sub">بوابة الطلاب — Firebase Authentication</div>
+    <div class="background-overlay"></div>
+    <div class="container">
+        <div class="login-card">
+            <div class="brand">
+                <div class="logo">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <h1>مرحباً بك</h1>
+                <p>سجل الدخول للوصول إلى لوحة التحكم</p>
+            </div>
 
-    <div class="input-group">
-        <label>👤 اسم الطالب الكامل</label>
-        <input type="text" id="studentName" placeholder="مثال: أحمد محمد علي">
-    </div>
-    <div class="input-group">
-        <label>📱 رقم الهاتف</label>
-        <input type="tel" id="phone" placeholder="05xxxxxxxx">
-    </div>
-    <div class="input-group">
-        <label>🔒 كلمة المرور</label>
-        <input type="password" id="password" placeholder="••••••••">
-    </div>
-    <div class="input-group">
-        <label>✉️ البريد الإلكتروني (للتسجيل والدخول)</label>
-        <div class="verify-row">
-            <input type="email" id="email" placeholder="student@example.com">
-            <button type="button" class="verify-btn" id="verifyEmailBtn">تحقق (رمز)</button>
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="email">البريد الإلكتروني</label>
+                    <input type="email" id="email" name="email" placeholder="example@company.com" required autocomplete="email">
+                    <span class="input-icon">📧</span>
+                </div>
+
+                <div class="input-group">
+                    <label for="password">كلمة المرور</label>
+                    <input type="password" id="password" name="password" placeholder="••••••••" required autocomplete="current-password">
+                    <span class="input-icon">🔒</span>
+                    <button type="button" id="togglePassword" class="toggle-pwd">👁️</button>
+                </div>
+
+                <div class="options">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="remember"> تذكرني
+                    </label>
+                    <a href="#" id="forgotPassword" class="forgot-link">نسيت كلمة المرور؟</a>
+                </div>
+
+                <button type="submit" id="loginBtn" class="login-btn">
+                    <span>تسجيل الدخول</span>
+                    <div class="btn-spinner hidden"></div>
+                </button>
+
+                <div id="errorMessage" class="error-message hidden"></div>
+                <div id="successMessage" class="success-message hidden"></div>
+            </form>
+
+            <div class="divider">
+                <span>أو</span>
+            </div>
+
+            <button id="googleSignIn" class="social-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                    <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                </svg>
+                <span>الدخول باستخدام Google</span>
+            </button>
+
+            <div class="signup-prompt">
+                ليس لديك حساب؟ <a href="#" id="showSignup">إنشاء حساب جديد</a>
+            </div>
+        </div>
+
+        <!-- بطاقة التسجيل (hidden initially) -->
+        <div class="login-card signup-card hidden">
+            <div class="brand">
+                <div class="logo">✨</div>
+                <h1>إنشاء حساب</h1>
+                <p>انضم إلى منصتنا اليوم</p>
+            </div>
+
+            <form id="signupForm">
+                <div class="input-group">
+                    <label for="signupName">الاسم الكامل</label>
+                    <input type="text" id="signupName" placeholder="أحمد محمد">
+                    <span class="input-icon">👤</span>
+                </div>
+                <div class="input-group">
+                    <label for="signupEmail">البريد الإلكتروني</label>
+                    <input type="email" id="signupEmail" placeholder="ahmed@example.com">
+                    <span class="input-icon">📧</span>
+                </div>
+                <div class="input-group">
+                    <label for="signupPassword">كلمة المرور</label>
+                    <input type="password" id="signupPassword" placeholder="••••••••">
+                    <span class="input-icon">🔒</span>
+                </div>
+                <button type="submit" id="signupBtn" class="login-btn">إنشاء حساب</button>
+                <div id="signupError" class="error-message hidden"></div>
+            </form>
+
+            <div class="signup-prompt">
+                لديك حساب بالفعل؟ <a href="#" id="showLogin">تسجيل الدخول</a>
+            </div>
         </div>
     </div>
 
-    <button type="button" onclick="handleLogin()">🚪 تسجيل الدخول</button>
-    <button type="button" class="btn-secondary" onclick="registerNewStudent()">📝 إنشاء حساب جديد (تسجيل)</button>
-
-    <div class="note">
-        🔐 يعمل عبر Firebase: توثيق البريد الإلكتروني + تخزين بيانات الطالب في Firestore<br>
-        ⚠️ استبدل إعدادات Firebase الخاصة بك في الكود.
-    </div>
-</div>
-
-<script>
-    // محاكاة التحقق من البريد (يمكن ربطه مع Firebase حقيقة)
-    let isEmailVerified = false;
-    document.getElementById('verifyEmailBtn').addEventListener('click', function() {
-        const email = document.getElementById('email').value.trim();
-        if (!email || !email.includes('@')) {
-            alert('أدخل بريداً صحيحاً');
-            return;
-        }
-        const fakeCode = Math.floor(100000 + Math.random() * 900000);
-        alert(`رمز التحقق التجريبي: ${fakeCode}\n(في التطبيق الحقيقي سيتم إرساله لبريدك)`);
-        const userCode = prompt("أدخل الرمز:");
-        if (userCode == fakeCode) {
-            isEmailVerified = true;
-            alert("✅ تم توثيق البريد");
-            document.getElementById('verifyEmailBtn').innerText = "✔ موثق";
-            document.getElementById('verifyEmailBtn').style.background = "#10b981";
-        } else {
-            isEmailVerified = false;
-            alert("❌ رمز خاطئ");
-        }
-    });
-</script>
+    <script type="module" src="script.js"></script>
 </body>
 </html>
